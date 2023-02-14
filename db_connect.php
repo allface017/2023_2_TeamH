@@ -2,7 +2,7 @@
 //ユーザー名、パスワード、データベース名、サーバー
 $user = "root";
 $pass = "";
-$database = "2023_2_TeamH";
+$database = "team-h";
 $server = "127.0.0.1:3308";
 
 //DSN文字列の生成

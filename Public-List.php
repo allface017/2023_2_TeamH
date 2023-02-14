@@ -11,45 +11,111 @@ if (!empty($_POST["name"])) {
 
 <head>
     <meta charset="UTF-8">
-    <title>管理者一覧</title>
+    <title>記事の一覧(公開)</title>
+    <style>
+         a{
+          font-size: 50px;
+        color: white;
+        text-decoration: none;
+      }
+        h2,p {
+            color: white;
+        }
 
+        body {
+            background: linear-gradient(90deg, rgb(22, 135, 237), rgb(20, 55, 90));
+            height: 10rem;
+            text-align: center;
+        }
+        form {
+        width: 50%;
+        padding: 10px 10px;
+        margin: auto;
+        top: 50%;
+        left: 50%;
+        border: solid 3px white;
+        text-align: center;
+        }
+        table {
+          width: 50%;
+        padding: 10px 10px;
+        margin: auto;
+        top: 50%;
+        left: 50%;
+
+        text-align: center;
+        border-collapse:  collapse;  
+        }
+        th,td {
+        border: solid 3px yellowgreen;     
+        color: greenyellow;
+        padding: 10px;    
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 
 <body>
-<div class="ly_section_inner">
-    <a class="el_lv2Heading" href="Admin.php">管理者メニューへ</a>
-    <!-- ここから3カラム記事エリア -->
-    <ul class="card_items">
-      <li>
-        <a class="card_item" href="#">
-          <article>
-            <figure class="card_item_imgWrapper">
-              <img src="assets/img/photo.jpg" alt="">
-            </figure>
-            <div class="card_item_body">
-              <h3 class="card_item_ttl">
-            タイトル
-              </h3>
-            </div>
-          </article>
-        </a>
-      </li>
-      <li>
-        <a class="card_item" href="#">
-          <article>
-              <h3 class="card_item_ttl">
-                タイトル
-              </h3>
-          </article>
-        </a>
-      </li>
 
-    </ul>
 
-  </div>
-</body>
+    <a href="index.php">TOPメニューへ</a>
+
+<div class="toprankers">
+            <?php
+            // foreach ($result1 as $data) {
+
+                    // echo '<div class="topslave"' . ' id="topS' . $i . '">';
+                    // echo '<h2>' . $i . '.';
+                    // print_r($re2[0]["name"]);
+                    // echo '：';
+                    // print_r($data["score"]);
+                    // echo "点" . "</h2>";
+                    // echo '<h2>';
+                    // print_r($data["comment"]);
+                    // echo "</h2>";
+                    // echo "<br>";
+                    // echo "</div>";
+                
+            //}
+
+            ?>
+        </div>
+
+        <table>
+          <tr>
+            <td>タイトル</td>
+            <td>編集</td>
+            <td>削除</td>
+          </tr>
+      <tr>
+        <td>タイトル</td>
+        <td>編集</td>
+        <td>削除</td>
+      </tr>
+
+      <tr>
+        <td>タイトル</td>
+        <td>編集</td>
+        <td>削除</td>
+      </tr>
+
+</table>
 
 
 
 </html>
+<!-- <tr>
+    <td>タイトル</td>
+    <td>編集</td>
+    <td>削除</td>
+    <!-- <?php while ($row = $stm->fetchAll(PDO::FETCH_ASSOC)) { ?>
+    -->
+    <!--     <td><?php echo $row['title']; ?></td>
+    <td><a href="edit_post.php?id=<?php echo $row['id']; ?>">編集</a></td>
+    <td><a href="delete_post.php?id=<?php echo $row['id']; ?>">削除</a></td>
+  -->
+  
+  <!--
+    <?php } ?> 
+  </tr> -->
