@@ -1,49 +1,89 @@
 <?php
 require "db_connect.php";
 session_start();
-if (isset($_POST["Title"]) && isset($_POST["Article-Content"]) && isset($_SESSION["errexchange"]) ) {            
-    $sql = "INSERT INTO Article (Title,Article-Content,exchange) VALUES(:Title,:Article-Content,:exchange)";
+
+ //タイトルの記入確認
+ if (isset($_POST["Title"])) {
+    $_POST["Title"] = htmlspecialchars($_POST["Title"], ENT_QUOTES, "UTF-8");
+    $_SESSION["Title"] = $_POST["Title"];
+    $Title = $_POST["Title"];
+
+} 
+
+//記事の内容確認
+if (isset($_POST["Article_Content"])) {
+    $_POST["Article_Content"] = htmlspecialchars($_POST["Article_Content"], ENT_QUOTES, "UTF-8");
+    $_SESSION["Article_Content"] = $_POST["Article_Content"];
+    $Article_Content = $_POST["Article_Content"];
+
+} 
+
+            //公開・非公開の確認
+            if(isset($_POST["exchange"])){
+                $_POST["exchange"] = htmlspecialchars($_POST["exchange"],ENT_QUOTES,"UTF-8");
+              $_SESSION["exchange"] = $_POST["exchange"];
+              $exchange = $_POST["exchange"];
+
+            }
+
+
+
+
+
+
+
+if (isset($_POST["Title"]) && isset($_POST["Article_Content"]) && isset($_POST["exchange"]) ) { 
+    // echo "来ました";           
+    $sql = "INSERT INTO article (Title,Article_Content,exchange,delete_flag) VALUES (:Title,:Article_Content,:exchange,:delete_flag)";
                 //タイトルの記入確認
                     if (isset($_POST["Title"])) {
                         $_POST["Title"] = htmlspecialchars($_POST["Title"], ENT_QUOTES, "UTF-8");
                         $Title = $_POST["Title"];
                     } else {
                         $_SESSION["errTitle"]= 1;
-                        }
+                        // echo "タイトル失敗";
+                    }
                     
-               
-                        
-                //記事の内容確認
-                    if (isset($_POST["Article-Content"])) {
-                        $_POST["Article-Content"] = htmlspecialchars($_POST["Article-Content"], ENT_QUOTES, "UTF-8");
-                        $Article_Content = $_POST["Article-Content"];
+                    //記事の内容確認
+                    if (isset($_POST["Article_Content"])) {
+                        $_POST["Article_Content"] = htmlspecialchars($_POST["Article_Content"], ENT_QUOTES, "UTF-8");
+                        $Article_Content = $_POST["Article_Content"];
                     } else {
-                            $_SESSION["errArticle-Content"] = 1;
+                        $_SESSION["errArticle_Content"] = 1;
+                        // echo "記事失敗";
+                                }
+        
+                                //公開・非公開の確認
+                                if(isset($_POST["exchange"])){
+                                    $_POST["exchange"] = htmlspecialchars($_POST["exchange"],ENT_QUOTES,"UTF-8");
+                                    $exchange = $_POST["exchange"];
+                                }else {
+                                    $_SESSION["errexchange"] = 1;
+                                    // echo "公開失敗";
+                                    
+                                }
+
+
+
+                        if (isset($Title) && isset($Article_Content) && isset($exchange)) {
+                            $delete= 0;
+                            // echo "実行可能";
+                        $stm = $pdo->prepare($sql);
+                        $stm->bindValue(":Title", $Title, PDO::PARAM_STR);
+                        $stm->bindValue(":Article_Content", $Article_Content, PDO::PARAM_STR);
+                        $stm->bindValue(":exchange", $exchange, PDO::PARAM_STR);
+                        $stm->bindValue(":delete_flag", $delete, PDO::PARAM_STR);
+                        $stm->execute();        //sqlの実行
+                        header("location:Public-List.php");
+                        exit();
+                        }else{
+                            // echo "sql失敗";
+                        header("location:Post.php");
+                        exit();
                         }
-                        //公開・非公開の確認
-                        if(isset($_POST["exchange"])){
-                            $_POST["exchange"] = htmlspecialchars($_POST["exchange"],ENT_QUOTES,"UTF-8");
-                            $exchange = $_POST["exchange"];
-                        }else {
-                            $_SESSION["errexchange"] = 1;
-            
-                        }
-            
-            
-            
-                if (isset($Title) && isset($Article_Content) && isset($exchange)) {
-                    $stm = $pdo->prepare($sql); //プリペアードステートメントを作成
-                    $stm->bindValue(":Title", $Title, PDO::PARAM_STR);
-                    $stm->bindValue(":Article-Content", $Article_Content, PDO::PARAM_STR);
-                    $stm->bindValue(":exchange", $exchange, PDO::PARAM_STR);
-                    $stm->execute();        //sqlの実行
-                    header("location:Post-List.php");
-                    exit();
-                }else{
-                    header("location:Post.php");
-                    exit();
-                }
-            }   
+            }   else {
+                // echo "実行失敗";
+            }
             ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -80,24 +120,17 @@ if (isset($_POST["Title"]) && isset($_POST["Article-Content"]) && isset($_SESSIO
                 echo '<a style="color:#ff0000;font-size: 12px;">　　　　　　タイトルを入力してください？</a>';
             } ?>
         </p>
-        <input type="text" name="Title">
-        <p>記事の内容<?php if (isset($_SESSION["errArticle-Content"])) {
+        <input type="text" name="Title"  value="<?php echo  $Title ?>">
+        <p>記事の内容<?php if (isset($_SESSION["errArticle_Content"])) {
             echo '<a style="color:#ff0000";font-size: 12px;>　　　　　　記事を入力してください？</a>';
         } ?></p>
-      <textarea name="Article-Content" rows="10" cols="100"></textarea><br>
+      <textarea name="Article_Content" rows="10" cols="100" value="<?php echo  $Article_Content ?>"></textarea><br>
             <p>公開<?php if (isset($_SESSION["errexchange"])) {
                 echo '<a style="color:#ff0000";font-size: 12px;>　　　　　　公開・非公開を選択してください？</a>';
                     } ?>
             <input type="radio" name="exchange" value="0" checked>
         <p>非公開
             <input type="radio" name="exchange" value="1">
-            <p>おすすめの場所</p>
-        <input type="text" name="Location">
-        <p>おすすめの場所の内容</p>
-      <textarea name="Location-Content" rows="10" cols="100"></textarea><br>
-        
-
-
       <input id="id" type="submit" value="投稿">
     </form>
 </body>
@@ -105,8 +138,8 @@ if (isset($_POST["Title"]) && isset($_POST["Article-Content"]) && isset($_SESSIO
 </html>
 <script>
     window.onload = function submit() {
-        <?php
-        session_destroy();
-        ?>
+
     }
 </script>
+
+
