@@ -1,4 +1,5 @@
 <?php
+require "db_connect.php";
 if (!isset($_SESSION)) {
     session_start();
 }
@@ -6,10 +7,10 @@ if (!empty($_POST["name"])) {
     $_SESSION["name"] = $_POST["name"];
 }
 
-// $sql = "select * from Article order by id asc";
-// $stm = $pdo->prepare($sql); //プリペアードステートメントを作成
-// $stm->execute();
-// $result1 = $stm->fetchAll(PDO::FETCH_ASSOC);
+$sql = "select * from article WHERE delete_flag = 0 order by id asc";
+$stm = $pdo->prepare($sql); //プリペアードステートメントを作成
+$stm->execute();
+$result= $stm->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -65,42 +66,24 @@ if (!empty($_POST["name"])) {
 
     <a href="Admin.php">管理者メニューへ</a>
 
- <div class="toprankers">
+    <div class="list">
+  <table>
             <?php
-            // foreach ($result1 as $data) {
-
-                    // echo '<div class="topslave"' . ' id="topS' . $i . '">';
-                    // echo '<h2>' . $i . '.';
-                    // print_r($re2[0]["name"]);
-                    // echo '：';
-                    // print_r($data["score"]);
-                    // echo "点" . "</h2>";
-                    // echo '<h2>';
-                    // print_r($data["comment"]);
-                    // echo "</h2>";
-                    // echo "<br>";
-                    // echo "</div>";
-                
-            //}
+            foreach ($result as $data) {
+              $id = $data["id"];
+                    echo '<tr>';
+                    echo '<td>'.'<a href="Article.php?id='.$id.'">';
+                    print_r($data["Title"]);
+                    echo '</a>'.'</td>';
+                    echo '<td>'.'<a href="delete.php?id="'.$id.'">'."削除";
+                    echo '</a>'.'</td>';
+                    echo '<td>'.'<a href="editing.php?id="'.$id.'">'."編集";
+                    echo '</a>'.'</td>'.'</tr>';
+            }
 
             ?>
-        </div>
+    <div>
 
-        <table>
-    <tr>
-        <td>タイトル</td>
-        <td>編集</td>
-        <td>削除</td>
-        <!-- <?php while ($row = $stm->fetchAll(PDO::FETCH_ASSOC)) { ?>
-        -->
-        <!--     <td><?php echo $row['title']; ?></td>
-        <td><a href="edit_post.php?id=<?php echo $row['id']; ?>">編集</a></td>
-        <td><a href="delete_post.php?id=<?php echo $row['id']; ?>">削除</a></td>
-      -->
-      
-      <!--
-        <?php } ?> -->
-      </tr>
 </table>
 
 </html>
