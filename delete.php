@@ -1,9 +1,16 @@
 <?php
-    require_once('db_connect.php');
+    require_once('db_connection.php');
   // Get the ID from the session
   session_start();
-  $id = $_SESSION['id'];
-  
+ // Get the ID from the query parameters
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+} else {
+    // If ID is not provided, redirect to the index page
+    header('Location: Admin-List.php');
+    exit;
+}
+
   // Check if the form has been submitted
   if (isset($_POST['submit'])) {
       // Check if the user has confirmed the delete operation
@@ -35,7 +42,7 @@
     </div>
     <!-- Delete form -->
     <nav style="justify-content:center; display:flex;">
-        <form action="delete.php" method="post">
+        <form action="delete.php?id=<?php echo $id; ?>" method="post">
             <div style="margin-top: 300%;">
                 <input type="submit" name="submit" value="削除する">
                 <input type="hidden" name="confirm_delete" value="yes">
@@ -46,4 +53,3 @@
         </form>
     </nav>
 </body>
-    
