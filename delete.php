@@ -1,31 +1,5 @@
 <?php
-  // ユーザー名
-  $user = "root";
-  // パスワード
-  $pass = "passward";
-  // データベース名
-  $database = "databasename";
-  // サーバー
-  $server = "localhost";
-
-  // DSM文字列の生成
-  $dsn = "mysql:host={$server};dbname={$database};charset=utf8";
-
-  // mysqlへの接続
-  try{
-      // PDOのインスタンスを作成し、DBに接続する
-    $pdo = new PDO($dsn, $user, $pass);
-    // プリペアドステートメントのエミュレーションを無効か
-    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-    // 例外がスローされるように変更する
-    $pdo -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    // echo "成功";
-  }catch(Exception $e){
-      echo "接続エラー:";
-      echo $e -> getMessage();
-      exit();
-  }
-  
+    require_once('db_connect.php');
   // Get the ID from the session
   session_start();
   $id = $_SESSION['id'];
@@ -42,21 +16,34 @@
           $stmt->execute();
   
           // Redirect to the index page
-          header('Location: index.php');
+          header('Location: Admin-List.php');
           exit;
       } else {
           // Redirect to the index page without deleting the record
-          header('Location: index.php');
+          header('Location: Admin-List.php');
           exit;
       }
   }
   
   ?>
-  
-  <!-- Delete form -->
-  <form action="delete.php" method="post">
-      <input type="submit" name="submit" value="削除する">
-      <input type="hidden" name="confirm_delete" value="yes">
-      <input type="submit" name="submit" value="削除しない">
-  </form>
-  
+<body style="background: linear-gradient(90deg, rgb(22, 135, 237), rgb(20, 55, 90))">
+    <h1>削除確認画面</h1>
+    <div style="justify-content:center; display:flex;">
+      <button>
+          <a href="Admin.php" style="text-decoration:none; color:black;">管理者メニューへ</a>
+        </button>
+    </div>
+    <!-- Delete form -->
+    <nav style="justify-content:center; display:flex;">
+        <form action="delete.php" method="post">
+            <div style="margin-top: 300%;">
+                <input type="submit" name="submit" value="削除する">
+                <input type="hidden" name="confirm_delete" value="yes">
+            </div>
+            <div style="margin-top:50px">
+                <input type="submit" name="submit" value="削除しない">
+            </div>
+        </form>
+    </nav>
+</body>
+    
