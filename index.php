@@ -136,7 +136,7 @@
     </div>
 
     <div class="button_wrapper2">
-        <a href="Public-List" class="btn02 pushright"><span>記事の一覧</span></a>
+        <a href="Public-List.php" class="btn02 pushright"><span>記事の一覧</span></a>
     </div>
     </div>
     </div>
