@@ -72,7 +72,7 @@ $result= $stm->fetchAll(PDO::FETCH_ASSOC);
             foreach ($result as $data) {
 
                     echo '<tr>';
-                    echo '<td>'.'<a href="Article.php?id='.$data["id"].'">';
+                    echo '<td>'.'<a href="view.php?id='.$data["id"].'">';
                     print_r($data["Title"]);
                     echo '</a>'.'</td>'.'</tr>';
                 

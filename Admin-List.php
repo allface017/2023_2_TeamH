@@ -72,12 +72,12 @@ $result= $stm->fetchAll(PDO::FETCH_ASSOC);
             foreach ($result as $data) {
               $id = $data["id"];
                     echo '<tr>';
-                    echo '<td>'.'<a href="Article.php?id='.$id.'">';
+                    echo '<td>'.'<a href="view.php?id='.$id.'">';
                     print_r($data["Title"]);
                     echo '</a>'.'</td>';
-                    echo '<td>'.'<a href="delete.php?id="'.$id.'">'."削除";
+                    echo '<td>'.'<a href="delete.php?id='.$id.'">'."削除";
                     echo '</a>'.'</td>';
-                    echo '<td>'.'<a href="editing.php?id="'.$id.'">'."編集";
+                    echo '<td>'.'<a href="edit.php?id='.$id.'">'."編集";
                     echo '</a>'.'</td>'.'</tr>';
             }
 
