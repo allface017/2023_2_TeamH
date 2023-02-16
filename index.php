@@ -9,7 +9,7 @@
     <title>スポーツtopics</title>
     <style>
         .back{
-            background-color: #00aaff;
+            background: linear-gradient(90deg, rgb(22, 135, 237), rgb(20, 55, 90));
             border-radius: 40px 40px 40px 40px;
             width: 80%;
             margin-left: 10%;
