@@ -71,10 +71,10 @@ if (isset($_POST["Title"]) && isset($_POST["Article_Content"]) && isset($_POST["
                         $stm = $pdo->prepare($sql);
                         $stm->bindValue(":Title", $Title, PDO::PARAM_STR);
                         $stm->bindValue(":Article_Content", $Article_Content, PDO::PARAM_STR);
-                        $stm->bindValue(":exchange", $exchange, PDO::PARAM_STR);
-                        $stm->bindValue(":delete_flag", $delete, PDO::PARAM_STR);
+                        $stm->bindValue(":exchange", $exchange, PDO::PARAM_BOOL);
+                        $stm->bindValue(":delete_flag", $delete, PDO::PARAM_BOOL);
                         $stm->execute();        //sqlの実行
-                        header("location:Public-List.php");
+                        header("location:Admin-List.php");
                         exit();
                         }else{
                             // echo "sql失敗";
