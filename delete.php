@@ -1,5 +1,5 @@
 <?php
-    require_once('db_connection.php');
+require "db_connect.php";
   // Get the ID from the session
   session_start();
  // Get the ID from the query parameters
@@ -33,7 +33,32 @@ if (isset($_GET['id'])) {
   }
   
   ?>
-<body style="background: linear-gradient(90deg, rgb(22, 135, 237), rgb(20, 55, 90))">
+  <!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>記事の一覧(公開)</title>
+    <style>
+         a{
+          font-size: 50px;
+        color: white;
+        text-decoration: none;
+      }
+        h2,p {
+            color: white;
+        }
+
+        body {
+            background: linear-gradient(90deg, rgb(22, 135, 237), rgb(20, 55, 90));
+            height: 10rem;
+            text-align: center;
+        }
+
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="background: linear-gradient(90deg, rgb(22, 135, 237), rgb(20, 55, 90))" >
     <h1>削除確認画面</h1>
     <div style="justify-content:center; display:flex;">
       <button>
