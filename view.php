@@ -3,7 +3,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>記事投稿ページ</title>
+    <title>記事閲覧機能
+    </title>
 
     <style>
 a{
@@ -121,22 +122,50 @@ p{
     color:white;
     
 }
+h2,h3{
+  color:white;
+}
 </style>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <a href="Admin.php">管理者メニューへ</a><br>
+
 
 
 </body>
 
 </html>
 <?php
-   require_once('db_connect.php');
+require_once('db_connect.php');
 
-  // Get the ID from GET parameter
+// Get the ID from GET parameter
 $id = isset($_GET['id']) ? $_GET['id'] : 1;
 $id = intval($id);
+
+// Find the previous article ID
+$prev_id = $id - 1;
+while ($prev_id > 0) {
+    $stmt = $pdo->prepare("SELECT id FROM article WHERE id = ? AND delete_flag = 0 AND exchange = 0");
+    $stmt->bindValue(1, $prev_id, PDO::PARAM_INT);
+    $stmt->execute();
+    if ($stmt->fetchColumn()) {
+        break;
+    }
+    $prev_id--;
+}
+
+// Find the next article ID
+$max_id = $pdo->query("SELECT MAX(id) FROM article WHERE delete_flag = 0 AND exchange = 0")->fetchColumn();
+$next_id = $id + 1;
+while ($next_id <= $max_id) {
+    $stmt = $pdo->prepare("SELECT id FROM article WHERE id = ? AND delete_flag = 0 AND exchange = 0");
+    $stmt->bindValue(1, $next_id, PDO::PARAM_INT);
+    $stmt->execute();
+    if ($stmt->fetchColumn()) {
+        break;
+    }
+    $next_id++;
+}
 
 // Prepare the SELECT statement
 $stmt = $pdo->prepare("SELECT * FROM article WHERE id = ? AND delete_flag = 0 AND exchange = 0");
@@ -151,29 +180,21 @@ $result = $stmt->fetch(PDO::FETCH_ASSOC);
 // Check if the result is not empty
 if (!empty($result)) {
     // Display the result
-    echo "<p>"."Title: " . $result['Title'] . "</p><br>";
-    echo "<p>"."Article_Content: " . $result['Article_Content'] . "</p><br>";
-    if($result['exchange'] ===0){
-        echo "<p>"."exchange: " . "公開" ."</p><br>";
-    }else {
-        echo "<p>"."exchange: " . "非公開" ."</p><br>";
+    echo "Title: " . $result['Title'] . "<br>";
+    echo "Article_Content: " . $result['Article_Content'] . "<br>";
 
-    }
 } else {
     // Display an error message
     echo "記事が見つかりません";
 }
 
 // Previous article button
-if ($id > 1) {
-    $prev_id = $id - 1;
+if ($prev_id >= 1) {
     echo '<a href="view.php?id=' . $prev_id . '"><button>前へ</button></a>';
 }
 
 // Next article button
-$max_id = $pdo->query("SELECT MAX(id) FROM article WHERE delete_flag = 0 AND exchange = 0")->fetchColumn();
-if ($id < $max_id) {
-    $next_id = $id + 1;
+if ($next_id <= $max_id) {
     echo '<a href="view.php?id=' . $next_id . '"><button>次へ</button></a>';
 }
 ?>

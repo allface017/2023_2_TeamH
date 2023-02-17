@@ -1,5 +1,6 @@
 <?php
 require "db_connect.php";
+session_start();
 if (!isset($_SESSION)) {
     session_start();
 }
@@ -11,6 +12,47 @@ $sql = "select * from article WHERE delete_flag = 0 order by id asc";
 $stm = $pdo->prepare($sql); //プリペアードステートメントを作成
 $stm->execute();
 $result= $stm->fetchAll(PDO::FETCH_ASSOC);
+
+if (isset($_GET['id'])) {
+  $id = $_GET['id'];
+}
+
+  if(isset($_GET['exchange'])){
+      $change = $_GET['exchange'];
+  }
+
+    if(isset($_GET['id']) && isset($_GET['exchange'])){
+
+      if($change === "0"){
+
+        $stmt = $pdo->prepare("UPDATE article SET exchange = 1 WHERE id = :id");
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+
+  $stmt->execute();
+  header('Location: Admin-List.php');
+  exit;
+
+
+        } elseif ($change === "1") {
+
+            $stmt = $pdo->prepare("UPDATE article SET exchange = 0 WHERE id = :id");
+            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+
+            $stmt->execute();
+            header('Location: Admin-List.php');
+            exit;
+            }
+
+           }
+
+
+
+
+
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -20,7 +62,7 @@ $result= $stm->fetchAll(PDO::FETCH_ASSOC);
     <title>管理者一覧</title>
     <style>
          a{
-          font-size: 50px;
+          font-size: 30px;
         color: white;
         text-decoration: none;
       }
@@ -78,7 +120,15 @@ $result= $stm->fetchAll(PDO::FETCH_ASSOC);
                     echo '<td>'.'<a href="delete.php?id='.$id.'">'."削除";
                     echo '</a>'.'</td>';
                     echo '<td>'.'<a href="edit.php?id='.$id.'">'."編集";
-                    echo '</a>'.'</td>'.'</tr>';
+                    echo '</a>'.'</td>';
+                    echo '<td>';
+                    $change = $data["exchange"];
+                    if($data['exchange'] ===0){
+                      echo '<a href="Admin-list.php?id='.$id.'&exchange='.$change.'"> '."公開". '</a>';
+                  }else {
+                      echo '<a href="Admin-list.php?id='.$id.'&exchange='.$change.'"> '."非公開". '</a>';
+                  }
+                    echo "</td>".'</tr>';
             }
 
             ?>
@@ -87,3 +137,29 @@ $result= $stm->fetchAll(PDO::FETCH_ASSOC);
 </table>
 
 </html>
+  <script language="javascript" type="text/javascript">
+        function ButtonClick() {
+         <?php
+           foreach ($result as $data) {
+            if($data['exchange'] ===0){
+              $stmt = $pdo->prepare("UPDATE article SET exchange = 1 WHERE id = ?");
+              $stmt->bindValue(1, $id, PDO::PARAM_INT);
+      
+              // Execute the update statement
+              $stmt->execute();
+
+
+           } elseif ($data['exchange']) {
+            $stmt = $pdo->prepare("UPDATE article SET exchange = 0 WHERE id = ?");
+              $stmt->bindValue(1, $id, PDO::PARAM_INT);
+      
+              // Execute the update statement
+              $stmt->execute();
+
+           }
+          }
+        ?>
+
+
+    }
+</script>
