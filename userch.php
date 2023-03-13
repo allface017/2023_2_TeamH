@@ -1,28 +1,29 @@
 <?php
 require "db_connect.php";
 session_start();
-$username = $_SESSION["name"];
+$id = $_SESSION["id"];
 
-$sql0 = "SELECT name FROM admin WHERE name = :username";
+$sql0 = "SELECT * FROM admin WHERE id = :id";
 //プリペアードステートメントを作成
 $stm0 = $pdo->prepare($sql0); 
-$stm0->bindValue(":username",$username, PDO::PARAM_STR);
+$stm0->bindValue(":id",$id, PDO::PARAM_STR);
 $stm0->execute();        //sqlの実行
-$result0 = $stm0->fetchAll(PDO::FETCH_ASSOC);
-var_dump($result0);
+$result = $stm0->fetch(PDO::FETCH_ASSOC);
+
+
+$username = $result['name'];
+$password = $result['password'];
 
 if (isset($_POST["name"]) && isset($_POST["pass"]) ) {
 
-
-    $sql = "INSERT INTO admin (name,password) VALUES(:name,:password)";
 
 
     //被った名前を探す
     $sql2 = "select name from admin";
     $stm2 = $pdo->prepare($sql2);
+    //sqlの実行
     $stm2->execute();
     $result1 = $stm2->fetchAll(PDO::FETCH_ASSOC);
-    $stm->execute();        //sqlの実行
     //名前被りの確認
     if (empty($result1)) {
         if (isset($_POST["name"])) {
@@ -40,7 +41,7 @@ if (isset($_POST["name"]) && isset($_POST["pass"]) ) {
             if (isset($_POST["name"])) {
                 if ($data["name"] === $_POST["name"]) {
                     $_SESSION["errname"] = 1;
-                    header("location:Register.php");
+                    header("location:userch.php");
                     exit();
                 } else {
                     $_POST["name"] = htmlspecialchars($_POST["name"], ENT_QUOTES, "UTF-8");
@@ -58,16 +59,17 @@ if (isset($_POST["name"]) && isset($_POST["pass"]) ) {
             $pass = $_POST["pass"];
         } else {
             $_SESSION["errpass"] = 1;
-            header("location:Register.php");
+            header("location:userch.php");
             exit();
         }
     }
 
     if (isset($name) && isset($pass)) {
-        $stm = $pdo->prepare($sql); //プリペアードステートメントを作成
-        $stm->bindValue(":name", $name, PDO::PARAM_STR);
-        $stm->bindValue(":password", $pass, PDO::PARAM_STR);
-        $stm->execute();        //sqlの実行
+      $stmt = $pdo->prepare("UPDATE admin SET name = ?, password = ?  WHERE id = ?");
+      $stmt->bindValue(1, $name, PDO::PARAM_STR);
+      $stmt->bindValue(2, $pass, PDO::PARAM_STR);
+      $stmt->bindValue(3, $id, PDO::PARAM_INT);
+      $stmt->execute();
         header("location:Admin.php");
         exit();
     }
@@ -77,7 +79,7 @@ if (isset($_POST["name"]) && isset($_POST["pass"]) ) {
 
 <head>
 
-    <title>新規登録</title>
+    <title>ユーザ情報変更</title>
     <style>
 
 a{
@@ -196,19 +198,19 @@ body {
 
 <div class="login-page">
     <div class="form">
-        <form action="Register.php" method="post">
+        <form action="userch.php" method="post">
             <h2></h2>
             <p>ユーザーネーム
                 <?php if (isset($_SESSION["errname"])) {
                     echo '<a style="color:#ff0000;font-size: 12px;">　　　　　　もう使われている名前だよ？</a>';
                 } ?>
             </p>
-            <input type="text" name="name" placeholder="ユーザーネーム"/>
+            <input type="text" name="name" value="<?php echo $result['name']; ?>">
         <p>パスワード<?php if (isset($_SESSION["errpass"])) {
                     echo '<a style="color:#ff0000;font-size: 12px;">　　　　　　アルファベットと数字だけで8文字以上書いてね？</a>';
                 } ?></p>
-            <input type="password" name="pass" placeholder="パスワード"/>
-      <input id="id" type="submit" value="登録">
+            <input type="password" name="pass"  value="<?php echo $result['password']; ?>">
+      <input id="id" type="submit" value="変更">
     </form>
 
         <!-- <input type="text" name="name"><br>

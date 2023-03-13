@@ -29,8 +29,12 @@ if(isset($_POST['user_name']) || isset($_POST['password'])){
         
         //$resultの中にあるパスワードと入力されたパスワードが一致するかどうか
         if($result['password'] === $_POST['password']){
-          //ユーザー変更に使うユーザーネームを保存
-          $_SESSION["name"] = $_POST['user_name'];
+          //ユーザー変更に使うidを保存
+
+
+
+          
+          $_SESSION["id"] = $result['id'];
             // echo 'パスワード一致';
             header("Location:Admin.php");
             //ログインが成功したらadmin.phpにリダイレクトする
