@@ -194,7 +194,7 @@ body {
 </head>
 
 <body>
-<a href="index.php">TOPメニューへ</a>
+<a href="admin.php">管理者メニューへ</a>
 
 
 <div class="login-page">
