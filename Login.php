@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'db_connect.php';
 //echo $_POST['user_name'];
 //echo $_POST['password'];
@@ -28,6 +29,8 @@ if(isset($_POST['user_name']) || isset($_POST['password'])){
         
         //$resultの中にあるパスワードと入力されたパスワードが一致するかどうか
         if($result['password'] === $_POST['password']){
+          //ユーザー変更に使うユーザーネームを保存
+          $_SESSION["name"] = $_POST['user_name'];
             // echo 'パスワード一致';
             header("Location:Admin.php");
             //ログインが成功したらadmin.phpにリダイレクトする
