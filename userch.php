@@ -1,7 +1,7 @@
 <?php
 require "Admin-session.php";
 require "db_connect.php";
-session_start();
+
 $id = $_SESSION["id"];
 
 $sql0 = "SELECT * FROM admin WHERE id = :id";

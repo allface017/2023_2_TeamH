@@ -1,7 +1,7 @@
 <?php
 require "Admin-session.php";
 require "db_connect.php";
-session_start();
+
 if (!isset($_SESSION)) {
     session_start();
 }

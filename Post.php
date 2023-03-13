@@ -1,7 +1,7 @@
 <?php
 require_once 'Admin-session.php';
 require "db_connect.php";
-session_start();
+
 
  //タイトルの記入確認
  if (isset($_POST["Title"])) {

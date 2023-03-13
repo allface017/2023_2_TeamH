@@ -2,7 +2,7 @@
 require "Admin-session.php";
 require "db_connect.php";
   // Get the ID from the session
-  session_start();
+  
  // Get the ID from the query parameters
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
