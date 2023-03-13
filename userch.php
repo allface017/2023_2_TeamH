@@ -2,11 +2,14 @@
 require "db_connect.php";
 session_start();
 $username = $_SESSION["name"];
-$sql = "SELECT * FROM admin WHERE name = :username";
-//プリペアードステートメントを作成
-$stm = $pdo->prepare($sql); 
-$stm->bindValue(":name", $name, PDO::PARAM_STR);
 
+$sql0 = "SELECT name FROM admin WHERE name = :username";
+//プリペアードステートメントを作成
+$stm0 = $pdo->prepare($sql0); 
+$stm0->bindValue(":username",$username, PDO::PARAM_STR);
+$stm0->execute();        //sqlの実行
+$result0 = $stm0->fetchAll(PDO::FETCH_ASSOC);
+var_dump($result0);
 
 if (isset($_POST["name"]) && isset($_POST["pass"]) ) {
 
