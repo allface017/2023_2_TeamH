@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once 'Admin-session.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -141,6 +141,10 @@ session_start();
 
     <div class="button_wrapper2">
         <a href="Post.php" class="btn02 pushright"><span>記事の投稿</span></a>
+    </div>
+
+    <div class="button_wrapper2">
+        <a href="userch.php" class="btn02 pushright"><span>ユーザー情報の変更</span></a>
     </div>
 
     <div class="button_wrapper2">

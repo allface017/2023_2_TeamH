@@ -1,4 +1,5 @@
 <?php
+require "Admin-session.php";
 require "db_connect.php";
 session_start();
 if (isset($_POST["name"]) && isset($_POST["pass"]) ) {

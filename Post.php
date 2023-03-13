@@ -1,4 +1,5 @@
 <?php
+require_once 'Admin-session.php';
 require "db_connect.php";
 session_start();
 

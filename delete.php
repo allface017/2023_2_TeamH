@@ -1,4 +1,5 @@
 <?php
+require "Admin-session.php";
 require "db_connect.php";
   // Get the ID from the session
   session_start();

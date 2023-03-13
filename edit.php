@@ -1,4 +1,5 @@
 <?php
+require "Admin-session.php";
 require_once 'db_connect.php';
 
 // Get the ID from the URL
