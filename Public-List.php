@@ -19,7 +19,7 @@ $result= $stm->fetchAll(PDO::FETCH_ASSOC);
     <title>記事の一覧(公開)</title>
     <style>
          a{
-          font-size: 50px;
+          font-size: 30px;
         color: white;
         text-decoration: none;
       }
@@ -31,15 +31,6 @@ $result= $stm->fetchAll(PDO::FETCH_ASSOC);
             background: linear-gradient(90deg, rgb(22, 135, 237), rgb(20, 55, 90));
             height: 10rem;
             text-align: center;
-        }
-        form {
-        width: 50%;
-        padding: 10px 10px;
-        margin: auto;
-        top: 50%;
-        left: 50%;
-        border: solid 3px white;
-        text-align: center;
         }
         table {
           width: 50%;

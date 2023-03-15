@@ -180,8 +180,8 @@ $result = $stmt->fetch(PDO::FETCH_ASSOC);
 // Check if the result is not empty
 if (!empty($result)) {
     // Display the result
-    echo "Title: " . $result['Title'] . "<br>";
-    echo "Article_Content: " . $result['Article_Content'] . "<br>";
+    echo "<h3>Title:</h3> <p>" . $result['Title'] . "</p>";
+    echo "<h3>Article_Content:</h3> <p>" . $result['Article_Content'] . "</p>";
 
 } else {
     // Display an error message
