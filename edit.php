@@ -87,12 +87,7 @@ a{
   background: #4CAF50;
   width: 100%;
   border: 0;
-  a{
-      font-size: 50px;
-    color: white;
-    text-decoration: none;
-
-  }
+  padding: 15px;
   color: #FFFFFF;
   font-size: 14px;
   -webkit-transition: all 0.3 ease;
@@ -162,21 +157,25 @@ body {
 </head>
 <body>
     <a href="Admin.php">管理者メニューへ</a>
+
     <div class="login-page">
       <div class="form">
-    <form  method="post">
-        <label for="Title">タイトル:</label><br>
+    <form action="edit.php" method="post">
+      <h2>記事の編集</h2>
+        <label for="Title"><p>タイトル:</p></label>
         <input type="text" id="Title" name="Title" value="<?php echo $result['Title']; ?>"><br>
-        <label for="Article_Content">内容:</label><br>
+        <label for="Article_Content"><p>内容:</p></label><br>
         <textarea id="Article_Content" name="Article_Content" rows="10" cols="50" ><?php echo $result['Article_Content']; ?></textarea><br>
         <div>
             <p>公開設定</p>
-            <label for="exchange1">公開</label>
+            <label for="exchange1"><p>公開</p></label>
             <input type="radio" name="exchange" id="exchange1" value="0" <?php if($result['exchange'] == 0) echo "checked"; ?>>
-            <label for="exchange2">非公開</label>
+            <label for="exchange2"><p>非公開</p></label>
             <input type="radio" name="exchange" id="exchange2" value="1" <?php if($result['exchange'] == 1) echo "checked"; ?>>
         </div>
-        <input id="id" class="btn02 pushright" type="submit" value="変更">
+        <div class="loginbutton">
+                        <button type="submit" class="roguinn">登録</button>
+                    </div>
     </form>
     </div>
   </div>

@@ -77,21 +77,21 @@ if (isset($_POST["Title"]) && isset($_POST["Article_Content"]) && isset($_POST["
                         $stm->execute();        //sqlの実行
                         header("location:Admin-List.php");
                         exit();
-                        }else{
+                      }else{
                             // echo "sql失敗";
-                        header("location:Post.php");
+                            header("location:Post.php");
                         exit();
-                        }
+                      }
             }   else {
                 // echo "実行失敗";
             }
             ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <title>記事投稿ページ</title>
-
+    
     <style>
 a{
       font-size: 50px;
@@ -134,12 +134,7 @@ a{
   background: #4CAF50;
   width: 100%;
   border: 0;
-  a{
-      font-size: 50px;
-    color: white;
-    text-decoration: none;
-
-  }
+  padding: 15px;
   color: #FFFFFF;
   font-size: 14px;
   -webkit-transition: all 0.3 ease;
@@ -234,7 +229,9 @@ body {
             <input type="radio" name="exchange" value="1">
             <br>
 
-      <input id="id" class="btn02 pushright" type="submit" value="投稿">
+            <div class="loginbutton">
+                        <button type="submit" class="roguinn">投稿</button>
+                    </div>
     </form>
             </div>
     </div>

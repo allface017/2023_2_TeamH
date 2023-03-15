@@ -190,7 +190,7 @@ body {
             <h2>新規登録</h2>
             <p>ユーザーネーム
                 <?php if (isset($_SESSION["errname"])) {
-                    echo '<a style="color:#ff0000;font-size: 12px;">　　　　　　もう使われている名前だよ？</a>';
+                    echo '<a style="color:#ff0000;font-size: 12px;">　　　　　　異なる名前を入力してください</a>';
                 } ?>
             </p>
             <input type="text" name="name" placeholder="ユーザーネーム"/>
@@ -198,7 +198,9 @@ body {
                     echo '<a style="color:#ff0000;font-size: 12px;">　　　　　　アルファベットと数字だけで8文字以上書いてね？</a>';
                 } ?></p>
             <input type="password" name="pass" placeholder="パスワード"/>
-      <input id="id" type="submit" value="登録">
+            <div class="loginbutton">
+                        <button type="submit" class="roguinn">登録</button>
+                    </div>
     </form>
 
         <!-- <input type="text" name="name"><br>
