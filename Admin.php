@@ -148,7 +148,7 @@ require_once 'Admin-session.php';
     </div>
 
     <div class="button_wrapper2">
-        <a href="index.php" class="btn02 pushright"><span>ログアウト</span></a>
+        <a href="Logout.php" class="btn02 pushright"><span>ログアウト</span></a>
     </div>
 
     </div>
