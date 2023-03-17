@@ -1,36 +1,45 @@
 <?php
 require_once 'db_connect.php';
+
 if (!isset($_SESSION)) {
     session_start();
 }
-$search = '';
+
 if (!empty($_GET['search'])) {
     $search = htmlspecialchars($_GET['search'], ENT_QUOTES, 'UTF-8');
+    $sql = "SELECT * FROM article WHERE exchange = 0 AND delete_flag = 0 AND Title LIKE :search";
+    $stm = $pdo->prepare($sql);
+    $stm->bindValue(':search', '%'.$search.'%', PDO::PARAM_STR);    
+} else {
+    header('Location: Public_list.php');
+    exit;
 }
-$sql = "SELECT * FROM article WHERE exchange = 0 AND delete_flag = 0";
-if (!empty($search)) {
-    $sql .= " AND (Title LIKE :search OR Article_Content LIKE :search)";
-}
-$sql .= " ORDER BY id ASC";
-$stm = $pdo->prepare($sql);
-if (!empty($search)) {
-    $stm->bindValue(':search', '%'.$search.'%', PDO::PARAM_STR);
-}
+
 $stm->execute();
 $result = $stm->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
+
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>記事の一覧(公開)</title>
+    <title>検索結果</title>
     <style>
         a {
             font-size: 50px;
             color: white;
             text-decoration: none;
         }
+        li{
+            list-style:none;
+        }
+
+        ul{
+            padding-left:0
+        }
         h2, p {
+            font-size: 30px;
             color: white;
         }
         body {
@@ -65,22 +74,16 @@ $result = $stm->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <a href="index.php">TOPメニューへ</a>
-    <div class="list">
-        <form method="GET" action="search_result.php">
-            <input type="text" name="search" value="<?php echo $search; ?>">
-            <input type="submit" value="検索">
-        </form>
-        <table>
-            <?php
-            foreach ($result as $data) {
-                echo '<tr>';
-                echo '<td>'.'<a href="view.php?id='.$data["id"].'">';
-                print_r($data["Title"]);
-                echo '</a>'.'</td>'.'</tr>';
-            }
-            ?>
-        </table>
-    </div>
+    <h1>検索結果</h1>
+    
+    <?php if (count($result) > 0): ?>
+        <ul>
+            <?php foreach ($result as $row): ?>
+                <li><a href="view.php?id=<?php echo $row['id']; ?>"><?php echo $row['Title']; ?></a></li>
+            <?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        <p>該当する記事がありませんでした。</p>
+    <?php endif; ?>
 </body>
 </html>

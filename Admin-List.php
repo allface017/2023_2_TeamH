@@ -1,18 +1,25 @@
 <?php 
-require "Admin-session.php";
-require "db_connect.php";
 
+require_once 'db_connect.php';
 if (!isset($_SESSION)) {
     session_start();
 }
-if (!empty($_POST["name"])) {
-    $_SESSION["name"] = $_POST["name"];
+$search = '';
+if (!empty($_GET['search'])) {
+    $search = htmlspecialchars($_GET['search'], ENT_QUOTES, 'UTF-8');
 }
-
-$sql = "select * from article WHERE delete_flag = 0 order by id asc";
-$stm = $pdo->prepare($sql); //プリペアードステートメントを作成
+$sql = "SELECT * FROM article WHERE delete_flag = 0";
+if (!empty($search)) {
+    $sql .= " AND (Title LIKE :search OR Article_Content LIKE :search)";
+}
+$sql .= " ORDER BY id ASC";
+$stm = $pdo->prepare($sql);
+if (!empty($search)) {
+    $stm->bindValue(':search', '%'.$search.'%', PDO::PARAM_STR);
+}
 $stm->execute();
-$result= $stm->fetchAll(PDO::FETCH_ASSOC);
+$result = $stm->fetchAll(PDO::FETCH_ASSOC);
+
 //記事idの取得
 if (isset($_GET['id'])) {
   $id = $_GET['id'];
@@ -110,6 +117,10 @@ if (isset($_GET['id'])) {
     <a href="Admin.php">管理者メニューへ</a>
 
     <div class="list">
+    <form method="GET" action="admin_result.php">
+            <input type="text" name="search" value="<?php echo $search; ?>">
+            <input type="submit" value="検索">
+    </form>>
   <table>
             <?php
             foreach ($result as $data) {
