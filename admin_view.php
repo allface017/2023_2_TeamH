@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -136,7 +135,8 @@ h2,h3{
 
 </html>
 <?php
-require_once('db_connect.php');
+require_once 'db_connect.php';
+require_once 'Admin-session.php';
 
 // Get the ID from GET parameter
 $id = isset($_GET['id']) ? $_GET['id'] : 1;
@@ -155,10 +155,10 @@ while ($prev_id > 0) {
 }
 
 // Find the next article ID
-$max_id = $pdo->query("SELECT MAX(id) FROM article WHERE delete_flag = 0 AND exchange = 0")->fetchColumn();
+$max_id = $pdo->query("SELECT MAX(id) FROM article WHERE delete_flag = 0")->fetchColumn();
 $next_id = $id + 1;
 while ($next_id <= $max_id) {
-    $stmt = $pdo->prepare("SELECT id FROM article WHERE id = ? AND delete_flag = 0 AND exchange = 0");
+    $stmt = $pdo->prepare("SELECT id FROM article WHERE id = ? AND delete_flag = 0");
     $stmt->bindValue(1, $next_id, PDO::PARAM_INT);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
@@ -168,7 +168,7 @@ while ($next_id <= $max_id) {
 }
 
 // Prepare the SELECT statement
-$stmt = $pdo->prepare("SELECT * FROM article WHERE id = ? AND delete_flag = 0 AND exchange = 0");
+$stmt = $pdo->prepare("SELECT * FROM article WHERE id = ? AND delete_flag = 0");
 $stmt->bindValue(1, $id, PDO::PARAM_INT);
 
 // Execute the SELECT statement
@@ -190,38 +190,11 @@ if (!empty($result)) {
 
 // Previous article button
 if ($prev_id >= 1) {
-    echo '<a href="view.php?id=' . $prev_id . '"><button>前へ</button></a>';
+    echo '<a href="admin_view.php?id=' . $prev_id . '"><button>前へ</button></a>';
 }
 
 // Next article button
 if ($next_id <= $max_id) {
-    echo '<a href="view.php?id=' . $next_id . '"><button>次へ</button></a>';
+    echo '<a href="admin_view.php?id=' . $next_id . '"><button>次へ</button></a>';
 }
-
-// $sql = "select * from Comment WHERE arid = ?";
-// $stm = $pdo->prepare($sql); //プリペアードステートメントを作成
-// $stmt->bindValue(1, $id, PDO::PARAM_INT);
-// $stm->execute();
-// $result1= $stm->fetchAll(PDO::FETCH_ASSOC);
-
-// if(!empty($_SESSION["id"])){
-
-//   //ユーザidを取得
-//   $userid = $_SESSION["id"];
-  
-//   //コメント取得
-  
-//   $i =0;
-//   if(!empty($result)){
-    
-//     foreach ($result1 as $data) {
-//     $i += 1;
-//     echo "<p>コメント".$i."：".$data["Comment"]."</p>";
-    
-//   }
-  
-// }
-// echo '<a href="ComPost.php?userid='.$userid.'arid='.$id.'">コメント投稿はこちら</a>';
-
-// }
 ?>

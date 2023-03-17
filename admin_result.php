@@ -24,14 +24,61 @@ $result = $stm->fetchAll(PDO::FETCH_ASSOC);
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>検索結果</title>
+    <title>検索結果(管理者)</title>
+    <style>
+        a {
+            font-size: 50px;
+            color: white;
+            text-decoration: none;
+        }
+        li{
+            list-style:none;
+        }
+
+        ul{
+            padding-left:0
+        }
+        h2, p {
+            font-size: 30px;
+            color: white;
+        }
+        body {
+            background: linear-gradient(90deg, rgb(22, 135, 237), rgb(20, 55, 90));
+            height: 10rem;
+            text-align: center;
+        }
+        form {
+            width: 50%;
+            padding: 10px 10px;
+            margin: auto;
+            top: 50%;
+            left: 50%;
+            border: solid 3px white;
+            text-align: center;
+        }
+        table {
+            width: 50%;
+            padding: 10px 10px;
+            margin: auto;
+            top: 50%;
+            left: 50%;
+            text-align: center;
+            border-collapse:  collapse;
+        }
+        th, td {
+            border: solid 3px yellowgreen;
+            color: greenyellow;
+            padding: 10px;
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>検索結果</h1>
     <?php if (count($result) > 0): ?>
         <ul>
             <?php foreach ($result as $row): ?>
-                <li><a href="view.php?id=<?php echo $row['id']; ?>"><?php echo $row['Title']; ?></a></li>
+                <li><a href="admin_view.php?id=<?php echo $row['id']; ?>"><?php echo $row['Title']; ?></a></li>
             <?php endforeach; ?>
         </ul>
     <?php else: ?>

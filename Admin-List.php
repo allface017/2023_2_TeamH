@@ -1,5 +1,5 @@
 <?php 
-
+require_once 'Admin-session.php';
 require_once 'db_connect.php';
 if (!isset($_SESSION)) {
     session_start();
@@ -120,13 +120,13 @@ if (isset($_GET['id'])) {
     <form method="GET" action="admin_result.php">
             <input type="text" name="search" value="<?php echo $search; ?>">
             <input type="submit" value="検索">
-    </form>>
+    </form>
   <table>
             <?php
             foreach ($result as $data) {
               $id = $data["id"];
                     echo '<tr>';
-                    echo '<td>'.'<a href="view.php?id='.$id.'">';
+                    echo '<td>'.'<a href="admin_view.php?id='.$id.'">';
                     print_r($data["Title"]);
                     echo '</a>'.'</td>';
                     echo '<td>'.'<a href="delete.php?id='.$id.'">'."削除";
