@@ -4,9 +4,16 @@ require_once 'db_connect.php';
 //echo $_POST['user_name'];
 //echo $_POST['password'];
 
+
 //エラーの処理
 //ユーザー名とパスワードが入力されているかチェック
 if(isset($_POST['user_name']) || isset($_POST['password'])){
+
+
+//ユーザー名を保管
+$_SESSION["user_name"] = $_POST['user_name'];
+
+
 
     if(!empty($_POST['user_name']) && !empty($_POST['password'])){
         
@@ -29,13 +36,17 @@ if(isset($_POST['user_name']) || isset($_POST['password'])){
         
         //$resultの中にあるパスワードと入力されたパスワードが一致するかどうか
         if($result['password'] === $_POST['password']){
-          //ユーザー変更に使うidを保存
+          //ユーザー変更に使うユーザーネームを保存
+       
 
-
-
-          
+          //
           $_SESSION["id"] = $result['id'];
+
             // echo 'パスワード一致';
+
+          //保管していたユーザー名を空にする
+            $_SESSION["user_name"] = "";
+
             header("Location:Admin.php");
             //ログインが成功したらadmin.phpにリダイレクトする
         }else{
@@ -48,6 +59,15 @@ if(isset($_POST['user_name']) || isset($_POST['password'])){
     // echo '<a style="color:#ff0000;font-size: 12px;">未入力の項目があります。</a>';
 }
 }
+//セッションがあったら$user_nameにセッションの値を入れる
+if(isset($_SESSION["user_name"] )){
+  $user_name = $_SESSION["user_name"];
+}
+//セッションがなかったら$user_nameにはなにも入れない
+else{
+  $user_name = "";
+}
+
 ?>
 <!DOCTYPE HTML>
 <html lang="ja">
@@ -176,7 +196,7 @@ body {
                 <form action="Login.php" method="post">
                         <label for="user_name">ユーザー名</label><br>
                         
-                        <input id="user_id" name="user_name" type="text" /><br>
+                        <input id="user_id" name="user_name" type="text" value="<?php echo $user_name;?>"/><br>
                         <?php if (isset($err['user_name'])) : ?>
                             <?php endif; ?>
 
