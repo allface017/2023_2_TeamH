@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>記事閲覧機能
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記事閲覧機能(管理者)
     </title>
-
-    <a href="index.php">管理者メニューへ</a>
 
     <style>
 a{
@@ -49,17 +49,17 @@ a{
   background: #4CAF50;
   width: 100%;
   border: 0;
-  a{
-      font-size: 50px;
-    color: white;
-    text-decoration: none;
-
-  }
   color: #FFFFFF;
   font-size: 14px;
   -webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
   cursor: pointer;
+}
+a{
+    font-size: 50px;
+  color: white;
+  text-decoration: none;
+
 }
 .form button:hover,.form button:active,.form button:focus {
   background: #43A047;
@@ -126,12 +126,14 @@ p{
 h2,h3{
   color:white;
 }
+
+
 </style>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-
+<a href="admin.php">管理者メニューへ</a>
 
 </body>
 
@@ -141,11 +143,22 @@ require_once 'db_connect.php';
 require_once 'Admin-session.php';
 
 // Get the ID from GET parameter
-$id = isset($_GET['id']) ? $_GET['id'] : 1;
-$id = intval($id);
+$arid = isset($_GET['arid']) ? $_GET['arid'] : 1;
+$arid = intval($arid);
+
+//記事idを保存
+
+
+//記事に書かれたコメントを取得
+$sql = "select * from Comment WHERE arid = ?";
+$stm = $pdo->prepare($sql); //プリペアードステートメントを作成
+$stm->bindValue(1, $arid, PDO::PARAM_INT);
+$stm->execute();
+$result1= $stm->fetchAll(PDO::FETCH_ASSOC);
+
 
 // Find the previous article ID
-$prev_id = $id - 1;
+$prev_id = $arid - 1;
 while ($prev_id > 0) {
     $stmt = $pdo->prepare("SELECT id FROM article WHERE id = ? AND delete_flag = 0 AND exchange = 0");
     $stmt->bindValue(1, $prev_id, PDO::PARAM_INT);
@@ -158,7 +171,7 @@ while ($prev_id > 0) {
 
 // Find the next article ID
 $max_id = $pdo->query("SELECT MAX(id) FROM article WHERE delete_flag = 0")->fetchColumn();
-$next_id = $id + 1;
+$next_id = $arid + 1;
 while ($next_id <= $max_id) {
     $stmt = $pdo->prepare("SELECT id FROM article WHERE id = ? AND delete_flag = 0");
     $stmt->bindValue(1, $next_id, PDO::PARAM_INT);
@@ -171,7 +184,7 @@ while ($next_id <= $max_id) {
 
 // Prepare the SELECT statement
 $stmt = $pdo->prepare("SELECT * FROM article WHERE id = ? AND delete_flag = 0");
-$stmt->bindValue(1, $id, PDO::PARAM_INT);
+$stmt->bindValue(1, $arid, PDO::PARAM_INT);
 
 // Execute the SELECT statement
 $stmt->execute();
@@ -192,11 +205,40 @@ if (!empty($result)) {
 
 // Previous article button
 if ($prev_id >= 1) {
-    echo '<a href="admin_view.php?id=' . $prev_id . '"><button>前へ</button></a>';
+    echo '<a href="admin_view.php?arid=' . $prev_id . '"><button>前へ</button></a>';
 }
 
 // Next article button
 if ($next_id <= $max_id) {
-    echo '<a href="admin_view.php?id=' . $next_id . '"><button>次へ</button></a>';
+    echo '<a href="admin_view.php?arid=' . $next_id . '"><button>次へ</button></a>';
 }
+echo '<br>';
+
+//コメントを表示
+if(!empty($_SESSION["id"])){
+
+  //ユーザidを取得
+  $userid = $_SESSION["id"];
+  
+  //コメント取得
+  
+  $i =0;
+  if(!empty($result)){
+    
+    foreach ($result1 as $data) {
+    $i += 1;
+    echo "<p>コメント".$i."：".$data['Comment']."</p>";
+    
+  }
+  
+}
+echo 
+'<div class="button_wrapper2"> 
+<a href="ComPost.php?userid='.$userid.'&arid='.$arid.'" class="btn01 pushright">
+<span>コメント投稿はこちら</span></a>
+</div>
+';
+
+}
+
 ?>

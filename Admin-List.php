@@ -126,7 +126,7 @@ if (isset($_GET['id'])) {
             foreach ($result as $data) {
               $id = $data["id"];
                     echo '<tr>';
-                    echo '<td>'.'<a href="admin_view.php?id='.$id.'">';
+                    echo '<td>'.'<a href="admin_view.php?arid='.$id.'">';
                     print_r($data["Title"]);
                     echo '</a>'.'</td>';
                     echo '<td>'.'<a href="delete.php?id='.$id.'">'."削除";

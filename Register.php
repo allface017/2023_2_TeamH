@@ -23,6 +23,8 @@ if (isset($_POST["name"]) && isset($_POST["pass"]) ) {
             } else {
                 $_POST["name"] = htmlspecialchars($_POST["name"], ENT_QUOTES, "UTF-8");
                 $name = $_POST["name"];
+                $_SESSION['name'] = $name;
+                $rename = 1;
             }
         }
     } else {
@@ -30,11 +32,13 @@ if (isset($_POST["name"]) && isset($_POST["pass"]) ) {
             if (isset($_POST["name"])) {
                 if ($data["name"] === $_POST["name"]) {
                     $_SESSION["errname"] = 1;
-                    header("location:Register.php");
-                    exit();
+                    // header("location:Register.php");
+                    // exit();
                 } else {
                     $_POST["name"] = htmlspecialchars($_POST["name"], ENT_QUOTES, "UTF-8");
                     $name = $_POST["name"];
+                    $_SESSION['name'] = $name;
+                    $rename = 1;
                 }
             }
         }
@@ -46,14 +50,21 @@ if (isset($_POST["name"]) && isset($_POST["pass"]) ) {
         if (preg_match('/\A[a-z\d]{8,100}+\z/i', $_POST["pass"]) == 1 ) {
             // $pass = password_hash($_POST["pass"], PASSWORD_DEFAULT);
             $pass = $_POST["pass"];
+            $_SESSION['pass'] = $pass;
+            $repass = 1;
         } else {
             $_SESSION["errpass"] = 1;
-            header("location:Register.php");
-            exit();
+            // header("location:Register.php");
+            // exit();
         }
     }
 
-    if (isset($name) && isset($pass)) {
+    if(isset($_SESSION["errpass"]) || isset($_SESSION["errname"])){
+            header("location:Register.php");
+            exit();
+    }
+
+    if (isset($rename) && isset($repass)) {
         $stm = $pdo->prepare($sql); //プリペアードステートメントを作成
         $stm->bindValue(":name", $name, PDO::PARAM_STR);
         $stm->bindValue(":password", $pass, PDO::PARAM_STR);
@@ -181,7 +192,7 @@ body {
 </head>
 
 <body>
-<a href="index.php">TOPメニューへ</a>
+<a style="font-size:30px;" href="index.php">TOPメニューへ</a>
 
 
 <div class="login-page">
@@ -193,11 +204,15 @@ body {
                     echo '<a style="color:#ff0000;font-size: 12px;">　　　　　　異なる名前を入力してください</a>';
                 } ?>
             </p>
-            <input type="text" name="name" placeholder="ユーザーネーム"/>
+            <input type="text" name="name" placeholder="ユーザーネーム" value="<?php if(!empty($_SESSION['name'])){
+              echo $_SESSION['name'];
+            } ?>"/>
         <p>パスワード<?php if (isset($_SESSION["errpass"])) {
-                    echo '<a style="color:#ff0000;font-size: 12px;">　　　　　　アルファベットと数字だけで8文字以上書いてね？</a>';
+                    echo '<a style="color:#ff0000;font-size: 12px;">　　　　　　アルファベットと数字だけで8文字以上書いてください</a>';
                 } ?></p>
-            <input type="password" name="pass" placeholder="パスワード"/>
+            <input type="password" name="pass" placeholder="パスワード" value=" <?php if(!empty($_SESSION['pass'])){
+              echo $_SESSION['pass'];
+            } ?>"/>
             <div class="loginbutton">
                         <button type="submit" class="roguinn">登録</button>
                     </div>

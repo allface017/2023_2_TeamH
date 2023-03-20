@@ -24,11 +24,11 @@ $result = $stm->fetchAll(PDO::FETCH_ASSOC);
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>検索結果</title>
+    <title>検索結果(一般)</title>
     <style>
         a {
             font-size: 50px;
-            color: white;
+            color: snow;
             text-decoration: none;
         }
         li{
@@ -39,7 +39,7 @@ $result = $stm->fetchAll(PDO::FETCH_ASSOC);
             padding-left:0
         }
         h2, p {
-            font-size: 30px;
+            font-size: 20px;
             color: white;
         }
         body {
@@ -74,9 +74,10 @@ $result = $stm->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<a href="index.php">TOPメニューへ</a>
     <h1>検索結果</h1>
     <?php $count =  count($result);
-    echo $count."件見つかりました。";?>
+    echo "<p>".$count."件見つかりました。" ."</p>";?>
     <?php if (count($result) > 0): ?>
         <ul>
             <?php foreach ($result as $row): ?>

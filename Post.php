@@ -4,28 +4,28 @@ require "db_connect.php";
 
 
  //タイトルの記入確認
- if (isset($_POST["Title"])) {
-    $_POST["Title"] = htmlspecialchars($_POST["Title"], ENT_QUOTES, "UTF-8");
-    $_SESSION["Title"] = $_POST["Title"];
-    $Title = $_POST["Title"];
+//  if (isset($_POST["Title"])) {
+//     $_POST["Title"] = htmlspecialchars($_POST["Title"], ENT_QUOTES, "UTF-8");
+//     $_SESSION["Title"] = $_POST["Title"];
+//     $Title = $_POST["Title"];
 
-} 
+// } 
 
-//記事の内容確認
-if (isset($_POST["Article_Content"])) {
-    $_POST["Article_Content"] = htmlspecialchars($_POST["Article_Content"], ENT_QUOTES, "UTF-8");
-    $_SESSION["Article_Content"] = $_POST["Article_Content"];
-    $Article_Content = $_POST["Article_Content"];
+ //記事の内容確認
+// if (isset($_POST["Article_Content"])) {
+//     $_POST["Article_Content"] = htmlspecialchars($_POST["Article_Content"], ENT_QUOTES, "UTF-8");
+//     $_SESSION["Article_Content"] = $_POST["Article_Content"];
+//     $Article_Content = $_POST["Article_Content"];
 
-} 
+// } 
 
-            //公開・非公開の確認
-            if(isset($_POST["exchange"])){
-                $_POST["exchange"] = htmlspecialchars($_POST["exchange"],ENT_QUOTES,"UTF-8");
-              $_SESSION["exchange"] = $_POST["exchange"];
-              $exchange = $_POST["exchange"];
+             //公開・非公開の確認
+//             if(isset($_POST["exchange"])){
+//                 $_POST["exchange"] = htmlspecialchars($_POST["exchange"],ENT_QUOTES,"UTF-8");
+//               $_SESSION["exchange"] = $_POST["exchange"];
+//               $exchange = $_POST["exchange"];
 
-            }
+//             }
 
 
 

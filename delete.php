@@ -39,7 +39,7 @@ if (isset($_GET['id'])) {
 
 <head>
     <meta charset="UTF-8">
-    <title>記事の一覧(公開)</title>
+    <title>削除ページ</title>
     <style>
          a{
           font-size: 50px;

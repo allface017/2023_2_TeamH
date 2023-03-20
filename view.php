@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>記事閲覧機能
+  <title>記事閲覧機能(一般)
   </title>
 
 <a href="index.php">TOPメニューへ</a>

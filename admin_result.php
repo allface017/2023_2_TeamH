@@ -35,6 +35,10 @@ $result = $stm->fetchAll(PDO::FETCH_ASSOC);
             list-style:none;
         }
 
+        h1{
+            color:white;
+        }
+
         ul{
             padding-left:0
         }
@@ -74,9 +78,10 @@ $result = $stm->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<a href="admin.php">管理者メニューへ</a>
     <h1>検索結果</h1>
     <?php $count =  count($result);
-    echo $count."件見つかりました。";?>
+    echo "<p>".$count."件見つかりました。" ."</p>";?>
     <?php if (count($result) > 0): ?>
         <ul>
             <?php foreach ($result as $row): ?>
