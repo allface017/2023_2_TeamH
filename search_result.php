@@ -75,7 +75,8 @@ $result = $stm->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
     <h1>検索結果</h1>
-    
+    <?php $count =  count($result);
+    echo $count."件見つかりました。";?>
     <?php if (count($result) > 0): ?>
         <ul>
             <?php foreach ($result as $row): ?>

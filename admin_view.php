@@ -5,6 +5,8 @@
     <title>記事閲覧機能
     </title>
 
+    <a href="index.php">管理者メニューへ</a>
+
     <style>
 a{
       font-size: 50px;
