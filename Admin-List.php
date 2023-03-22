@@ -21,15 +21,15 @@ $stm->execute();
 $result = $stm->fetchAll(PDO::FETCH_ASSOC);
 
 //記事idの取得
-if (isset($_GET['id'])) {
-  $id = $_GET['id'];
+if (isset($_GET['arid'])) {
+  $id = $_GET['arid'];
 }
 //公開・非公開の取得
   if(isset($_GET['exchange'])){
       $change = $_GET['exchange'];
   }
 
-    if(isset($_GET['id']) && isset($_GET['exchange'])){
+    if(isset($_GET['arid']) && isset($_GET['exchange'])){
 
       if($change === "0"){
 //記事を非公開にする処理
@@ -107,6 +107,109 @@ if (isset($_GET['id'])) {
         color: greenyellow;
         padding: 10px;    
         }
+        .btn01{
+            /*影の基点とするためrelativeを指定*/
+            position: relative;
+             /*ボタンの形状*/
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            background: transparent;
+            border-radius: 25px;
+            border: solid 1px #333;
+            outline: none;
+           /*アニメーションの指定*/
+            transition: all 0.2s ease;
+        }
+        .btn01:hover{
+             border-color:transparent; 
+        }
+        /*ボタンの中のテキスト*/
+        .btn01 span {
+            position: relative;
+             z-index: 2;/*z-indexの数値をあげて文字を背景よりも手前に表示*/
+            /*テキストの形状*/
+            display: block;
+            padding: 2px 5px;
+            background:#fff;
+            border-radius: 25px;
+            color:#333;
+            /*アニメーションの指定*/
+            transition: all 0.3s ease;
+        }
+        /*影の設定*/
+        .pushright:before {
+            content: "";
+            /*絶対配置で影の位置を決める*/
+            position: absolute;
+            z-index: -1;
+            top: 4px;
+            left: 4px;
+            /*影の形状*/
+            width: 50%;
+            height: 50%;
+            border-radius: 25px;
+            background-color: #333;
+        }
+        /*hoverの際にX・Y軸に4pxずらす*/
+        .pushright:hover span {
+            background-color: #333;
+            color: #fff;
+            transform: translate(4px, 4px);
+        }
+        .btn02{
+            /*影の基点とするためrelativeを指定*/
+            position: relative;
+             /*ボタンの形状*/
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            background: transparent;
+            border-radius: 25px;
+            border: solid 1px #333;
+            outline: none;
+           /*アニメーションの指定*/
+            transition: all 0.2s ease;
+        }
+        .btn02:hover{
+           border-color:transparent; 
+        }
+        /*ボタンの中のテキスト*/
+        .btn02 span {
+            position: relative;
+             z-index: 2;/*z-indexの数値をあげて文字を背景よりも手前に表示*/
+            /*テキストの形状*/
+            display: block;
+            padding: 10px 30px;
+            background:#fff;
+            border-radius: 25px;
+            color:#333;
+            /*アニメーションの指定*/
+            transition: all 0.3s ease;
+        }
+        /*影の設定*/
+        .pushright:before {
+            content: "";
+            /*絶対配置で影の位置を決める*/
+            position: absolute;
+            z-index: -1;
+            top: 4px;
+            left: 4px;
+            /*影の形状*/
+            width: 100%;
+            height: 100%;
+            border-radius: 25px;
+            background-color: ;
+        }
+        /*hoverの際にX・Y軸に4pxずらす*/
+        .pushright:hover span {
+            background-color: #333;
+            color: #fff;
+            transform: translate(4px, 4px);
+        }
+        .button_wrapper2{
+            margin-top: 10%;
+        }
     </style>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -126,19 +229,19 @@ if (isset($_GET['id'])) {
             foreach ($result as $data) {
               $id = $data["id"];
                     echo '<tr>';
-                    echo '<td>'.'<a href="admin_view.php?arid='.$id.'">';
+                    echo '<td>'.'<a  href="admin_view.php?arid='.$id.'">'.'<span>';
                     print_r($data["Title"]);
-                    echo '</a>'.'</td>';
-                    echo '<td>'.'<a href="delete.php?id='.$id.'">'."削除";
-                    echo '</a>'.'</td>';
-                    echo '<td>'.'<a href="edit.php?id='.$id.'">'."編集";
-                    echo '</a>'.'</td>';
+                    echo '</span>'.'</a>'.'</td>';
+                    echo '<td>'.'<div class="button_wrapper1">'.'<a class="btn01 pushright" href="delete.php?id='.$id.'">'.'<span>'."削除";
+                    echo '</span>'.'</a>'.'</div>'.'</td>';
+                    echo '<td>'.'<div class="button_wrapper1">'.'<a class="btn01 pushright" href="edit.php?id='.$id.'">'.'<span>'."編集";
+                    echo '</span>'.'</a>'.'</div>'.'</td>';
                     echo '<td>';
                     $change = $data['exchange'];
                     if($data['exchange'] ===0){
-                      echo '<a href="Admin-list.php?id='.$id.'&exchange='.$change.'"> '."公開". '</a>';
+                      echo '<a class="btn01 pushright" href="Admin-list.php?arid='.$id.'&exchange='.$change.'"> '.'<span>'."公開".'</span>'. '</a>';
                   }else {
-                      echo '<a href="Admin-list.php?id='.$id.'&exchange='.$change.'"> '."非公開". '</a>';
+                      echo '<a class="btn01 pushright" href="Admin-list.php?arid='.$id.'&exchange='.$change.'"> '.'<span>'."非公開".'</span>'.'</a>';
                   }
                     echo "</td>".'</tr>';
             }
@@ -151,7 +254,7 @@ if (isset($_GET['id'])) {
 </html>
 
   <!-- <script language="javascript" type="text/javascript">
-        function ButtonClick() {
+        function btn01 pushrightClick() {
 
 
           

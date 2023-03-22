@@ -13,7 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $exchange = $_POST['exchange'];
 
     // Update the article in the database
-    $stmt = $pdo->prepare("UPDATE article SET Title = ?, Article_Content = ?, exchange = ? WHERE id = ?");
+
+    $sql = "UPDATE `article` SET `Title` = ?, `Article_Content` = ?, `exchange` = ? WHERE `article`.`id` = ?";
+    $stmt = $pdo->prepare($sql);
     $stmt->bindValue(1, $Title, PDO::PARAM_STR);
     $stmt->bindValue(2, $Article_Content, PDO::PARAM_STR);
     $stmt->bindValue(3, $exchange, PDO::PARAM_INT);
@@ -160,7 +162,7 @@ body {
 
     <div class="login-page">
       <div class="form">
-    <form action="edit.php" method="post">
+    <form action="edit.php?id=<?php echo $id; ?>" method="post">
       <h2>記事の編集</h2>
         <label for="Title"><p>タイトル:</p></label>
         <input type="text" id="Title" name="Title" value="<?php echo $result['Title']; ?>"><br>
@@ -174,7 +176,7 @@ body {
             <input type="radio" name="exchange" id="exchange2" value="1" <?php if($result['exchange'] == 1) echo "checked"; ?>>
         </div>
         <div class="loginbutton">
-                        <button type="submit" class="roguinn">登録</button>
+                        <button type="submit" class="roguinn">編集</button>
                     </div>
     </form>
     </div>

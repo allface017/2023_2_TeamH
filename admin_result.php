@@ -85,7 +85,7 @@ $result = $stm->fetchAll(PDO::FETCH_ASSOC);
     <?php if (count($result) > 0): ?>
         <ul>
             <?php foreach ($result as $row): ?>
-                <li><a href="admin_view.php?id=<?php echo $row['id']; ?>"><?php echo $row['Title']; ?></a></li>
+                <li><a href="admin_view.php?arid=<?php echo $row['id']; ?>"><?php echo $row['Title']; ?></a></li>
             <?php endforeach; ?>
         </ul>
     <?php else: ?>

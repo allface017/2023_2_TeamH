@@ -143,85 +143,80 @@ require_once 'db_connect.php';
 require_once 'Admin-session.php';
 
 // Get the ID from GET parameter
-$arid = isset($_GET['arid']) ? $_GET['arid'] : 1;
-$arid = intval($arid);
-
-//記事idを保存
+$id = isset($_GET['arid']) ? $_GET['arid'] : 1;
+$id = intval($id);
 
 
-//記事に書かれたコメントを取得
-$sql = "select * from Comment WHERE arid = ?";
-$stm = $pdo->prepare($sql); //プリペアードステートメントを作成
-$stm->bindValue(1, $arid, PDO::PARAM_INT);
-$stm->execute();
-$result1= $stm->fetchAll(PDO::FETCH_ASSOC);
+
+
 
 
 // Find the previous article ID
-$prev_id = $arid - 1;
-while ($prev_id > 0) {
-    $stmt = $pdo->prepare("SELECT id FROM article WHERE id = ? AND delete_flag = 0 AND exchange = 0");
-    $stmt->bindValue(1, $prev_id, PDO::PARAM_INT);
-    $stmt->execute();
-    if ($stmt->fetchColumn()) {
-        break;
-    }
-    $prev_id--;
-}
+//今見ている記事のidよりちいさいid & 削除されていないものを一件だけ取得する
 
+
+  $stmt = $pdo->prepare("SELECT id FROM article WHERE id < ? AND delete_flag = 0  order by id desc limit 1 ");
+  $stmt->bindValue(1, $id, PDO::PARAM_INT);
+  $stmt->execute();
+  $min_id = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  //var_dump($min_id);
 // Find the next article ID
-$max_id = $pdo->query("SELECT MAX(id) FROM article WHERE delete_flag = 0")->fetchColumn();
-$next_id = $arid + 1;
-while ($next_id <= $max_id) {
-    $stmt = $pdo->prepare("SELECT id FROM article WHERE id = ? AND delete_flag = 0");
-    $stmt->bindValue(1, $next_id, PDO::PARAM_INT);
+
+//今見ている記事のidより大きいid & 削除されていないものを一件だけ取得する
+    $stmt = $pdo->prepare("SELECT id FROM article WHERE id > ? AND delete_flag = 0  order by id asc limit 1");
+    $stmt->bindValue(1, $id, PDO::PARAM_INT);
     $stmt->execute();
-    if ($stmt->fetchColumn()) {
-        break;
-    }
-    $next_id++;
-}
+    $max= $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Prepare the SELECT statement
-$stmt = $pdo->prepare("SELECT * FROM article WHERE id = ? AND delete_flag = 0");
-$stmt->bindValue(1, $arid, PDO::PARAM_INT);
+  
+  // Prepare the SELECT statement
+  $stmt = $pdo->prepare("SELECT * FROM article WHERE id = ? AND delete_flag = 0");
+  $stmt->bindValue(1, $id, PDO::PARAM_INT);
 
-// Execute the SELECT statement
-$stmt->execute();
-
-// Fetch the results
-$result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-// Check if the result is not empty
-if (!empty($result)) {
+  // Execute the SELECT statement
+  $stmt->execute();
+  
+  // Fetch the results
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  
+  // Check if the result is not empty
+  if (!empty($result)) {
     // Display the result
     echo "<h3>Title:</h3> <p>" . $result['Title'] . "</p>";
     echo "<h3>Article_Content:</h3> <p>" . $result['Article_Content'] . "</p>";
-
-} else {
+    
+  } else {
     // Display an error message
     echo "記事が見つかりません";
-}
-
-// Previous article button
-if ($prev_id >= 1) {
-    echo '<a href="admin_view.php?arid=' . $prev_id . '"><button>前へ</button></a>';
+  }
+  
+//Previous article button
+if ($min_id >= $id) {
+  echo '<a href="admin_view.php?arid=' . $min_id['id'] . '"><button>前へ</button></a>';
 }
 
 // Next article button
-if ($next_id <= $max_id) {
-    echo '<a href="admin_view.php?arid=' . $next_id . '"><button>次へ</button></a>';
+if ($id <= $max['id']) {
+  echo '<a href="admin_view.php?arid=' . $max['id']. '"><button>次へ</button></a>';
 }
-echo '<br>';
-
-//コメントを表示
-if(!empty($_SESSION["id"])){
-
-  //ユーザidを取得
-  $userid = $_SESSION["id"];
+  echo '<br>';
   
-  //コメント取得
+  //記事に書かれたコメントを取得
+  $sql = "select * from Comment WHERE arid = ?";
+  $stm = $pdo->prepare($sql); //プリペアードステートメントを作成
+  $stm->bindValue(1, $id, PDO::PARAM_INT);
+  $stm->execute();
+  $result1= $stm->fetchAll(PDO::FETCH_ASSOC);
   
+  //コメントを表示
+  if(!empty($_SESSION["id"])){
+
+    //ユーザidを取得
+    $userid = $_SESSION["id"];
+    
+    //コメント取得
+    
   $i =0;
   if(!empty($result)){
     
@@ -232,9 +227,10 @@ if(!empty($_SESSION["id"])){
   }
   
 }
+
 echo 
 '<div class="button_wrapper2"> 
-<a href="ComPost.php?userid='.$userid.'&arid='.$arid.'" class="btn01 pushright">
+<a href="ComPost.php?userid='.$userid.'&arid='.$id.'" class="btn01 pushright">
 <span>コメント投稿はこちら</span></a>
 </div>
 ';

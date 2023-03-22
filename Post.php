@@ -3,38 +3,38 @@ require_once 'Admin-session.php';
 require "db_connect.php";
 
 
- //タイトルの記入確認
-//  if (isset($_POST["Title"])) {
-//     $_POST["Title"] = htmlspecialchars($_POST["Title"], ENT_QUOTES, "UTF-8");
-//     $_SESSION["Title"] = $_POST["Title"];
-//     $Title = $_POST["Title"];
+ //タイトルの保持
+ if (!empty($_POST["Title"])) {
+    $_POST["Title"] = htmlspecialchars($_POST["Title"], ENT_QUOTES, "UTF-8");
+    $_SESSION["Title"] = $_POST["Title"];
+    $Title = $_POST["Title"];
 
-// } 
+} 
 
- //記事の内容確認
-// if (isset($_POST["Article_Content"])) {
-//     $_POST["Article_Content"] = htmlspecialchars($_POST["Article_Content"], ENT_QUOTES, "UTF-8");
-//     $_SESSION["Article_Content"] = $_POST["Article_Content"];
-//     $Article_Content = $_POST["Article_Content"];
+ //記事内容の保持
+if (!empty($_POST["Article_Content"])) {
+    $_POST["Article_Content"] = htmlspecialchars($_POST["Article_Content"], ENT_QUOTES, "UTF-8");
+    $_SESSION["Article_Content"] = $_POST["Article_Content"];
+    $Article_Content = $_POST["Article_Content"];
 
-// } 
+} 
 
-             //公開・非公開の確認
-//             if(isset($_POST["exchange"])){
-//                 $_POST["exchange"] = htmlspecialchars($_POST["exchange"],ENT_QUOTES,"UTF-8");
-//               $_SESSION["exchange"] = $_POST["exchange"];
-//               $exchange = $_POST["exchange"];
+             //公開・非公開の保持
+            if(!empty($_POST["exchange"])){
+                $_POST["exchange"] = htmlspecialchars($_POST["exchange"],ENT_QUOTES,"UTF-8");
+              $_SESSION["exchange"] = $_POST["exchange"];
+              $exchange = $_POST["exchange"];
 
-//             }
-
-
+            }
 
 
 
 
 
-if (isset($_POST["Title"]) && isset($_POST["Article_Content"]) && isset($_POST["exchange"]) ) { 
-    // echo "来ました";           
+
+
+if (!empty($_POST["Title"]) && !empty($_POST["Article_Content"]) && !empty($_POST["exchange"]) ) { 
+     echo "来ました";           
     $sql = "INSERT INTO article (Title,Article_Content,exchange,delete_flag) VALUES (:Title,:Article_Content,:exchange,:delete_flag)";
                 //タイトルの記入確認
                     if (isset($_POST["Title"])) {
@@ -75,8 +75,8 @@ if (isset($_POST["Title"]) && isset($_POST["Article_Content"]) && isset($_POST["
                         $stm->bindValue(":exchange", $exchange, PDO::PARAM_BOOL);
                         $stm->bindValue(":delete_flag", $delete, PDO::PARAM_BOOL);
                         $stm->execute();        //sqlの実行
-                        header("location:Admin-List.php");
-                        exit();
+                        // header("location:Admin-List.php");
+                        // exit();
                       }else{
                             // echo "sql失敗";
                             header("location:Post.php");
@@ -220,7 +220,9 @@ body {
         <p>記事の内容<?php if (isset($_SESSION["errArticle_Content"])) {
             echo '<a style="color:#ff0000";font-size: 12px;>　　　　　　記事を入力してください？</a>';
         } ?></p>
-      <textarea name="Article_Content" rows="10" cols="50" placeholder="記事本文" value="<?php echo  $Article_Content ?>"></textarea><br>
+      <textarea name="Article_Content" rows="10" cols="50" placeholder="記事本文"> <?php if(isset($Article_Content)){  
+      echo  $Article_Content;
+      }?></textarea><br>
             <p>公開<?php if (isset($_SESSION["errexchange"])) {
                 echo '<a style="color:#ff0000";font-size: 12px;>　　　　　　公開・非公開を選択してください？</a>';
                     } ?>

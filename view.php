@@ -55,20 +55,20 @@
       width: 100%;
       border: 0;
 
-      a {
-        font-size: 50px;
-        color: white;
-        text-decoration: none;
-
-      }
-
+      
       color: #FFFFFF;
       font-size: 14px;
       -webkit-transition: all 0.3 ease;
       transition: all 0.3 ease;
       cursor: pointer;
     }
+    a {
+      font-size: 50px;
+      color: white;
+      text-decoration: none;
 
+    }
+    
     .form button:hover,
     .form button:active,
     .form button:focus {
