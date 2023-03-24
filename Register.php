@@ -1,57 +1,70 @@
 <?php
 require "db_connect.php";
 session_start();
-if (isset($_POST["name"]) && isset($_POST["pass"]) ) {
+$_SESSION["errpass"] = null;
+$_SESSION["errname"] = null;
+
+if (!empty($_POST["name"])) {
+$sql = "INSERT INTO admin (name,password) VALUES(:name,:password)";
 
 
-    $sql = "INSERT INTO admin (name,password) VALUES(:name,:password)";
+//被った名前を探す
+$sql2 = "select name from admin";
+$stm2 = $pdo->prepare($sql2);
+$stm2->execute();
+$result1 = $stm2->fetchAll(PDO::FETCH_ASSOC);
 
+//名前被りの確認
+if (empty($result1)) {
+    if (!empty($_POST["name"])) {
+        if ($data["name"] === $_POST["name"]) {
+            $_SESSION["errname"] = 1;
+            header("location:Register.php");
+            exit();
+        } else {
+            $_POST["name"] = htmlspecialchars($_POST["name"], ENT_QUOTES, "UTF-8");
+            $name = $_POST["name"];
+            $_SESSION['name'] = $name;
 
-    //被った名前を探す
-    $sql2 = "select name from admin";
-    $stm2 = $pdo->prepare($sql2);
-    $stm2->execute();
-    $result1 = $stm2->fetchAll(PDO::FETCH_ASSOC);
-
-    //名前被りの確認
-    if (empty($result1)) {
-        if (isset($_POST["name"])) {
+        }
+    }
+} else {
+    foreach ($result1 as $data) {
+        if (!empty($_POST["name"])) {
             if ($data["name"] === $_POST["name"]) {
                 $_SESSION["errname"] = 1;
-                header("location:Register.php");
-                exit();
+                // header("location:Register.php");
+                // exit();
             } else {
                 $_POST["name"] = htmlspecialchars($_POST["name"], ENT_QUOTES, "UTF-8");
                 $name = $_POST["name"];
                 $_SESSION['name'] = $name;
-                $rename = 1;
-            }
-        }
-    } else {
-        foreach ($result1 as $data) {
-            if (isset($_POST["name"])) {
-                if ($data["name"] === $_POST["name"]) {
-                    $_SESSION["errname"] = 1;
-                    // header("location:Register.php");
-                    // exit();
-                } else {
-                    $_POST["name"] = htmlspecialchars($_POST["name"], ENT_QUOTES, "UTF-8");
-                    $name = $_POST["name"];
-                    $_SESSION['name'] = $name;
-                    $rename = 1;
-                }
+
             }
         }
     }
+}
+ //タイトルの保持
+
+
+} 
+
+//記事内容の保持
+if (!empty($_POST["pass"])) {
+  $_POST["pass"] = htmlspecialchars($_POST["pass"], ENT_QUOTES, "UTF-8");
+  $_SESSION["pass"] = $_POST["pass"];
+  $pass = $_POST["pass"];
+
+} 
+if (!empty($_POST["name"]) && !empty($_POST["pass"])) { 
 
     //パスワードの確認
-    if (isset($_POST["pass"])) {
+    if (!empty($_POST["pass"])) {
         $_POST["pass"] = htmlspecialchars($_POST["pass"], ENT_QUOTES, "UTF-8");
         if (preg_match('/\A[a-z\d]{8,100}+\z/i', $_POST["pass"]) == 1 ) {
             // $pass = password_hash($_POST["pass"], PASSWORD_DEFAULT);
             $pass = $_POST["pass"];
             $_SESSION['pass'] = $pass;
-            $repass = 1;
         } else {
             $_SESSION["errpass"] = 1;
             // header("location:Register.php");
@@ -59,26 +72,26 @@ if (isset($_POST["name"]) && isset($_POST["pass"]) ) {
         }
     }
 
-    if(isset($_SESSION["errpass"]) || isset($_SESSION["errname"])){
+    if(!empty($_SESSION["errpass"]) || !empty($_SESSION["errname"])){
             header("location:Register.php");
             exit();
     }
 
-    if (isset($rename) && isset($repass)) {
+    if (isset($name) && isset($pass)) {
         $stm = $pdo->prepare($sql); //プリペアードステートメントを作成
         $stm->bindValue(":name", $name, PDO::PARAM_STR);
         $stm->bindValue(":password", $pass, PDO::PARAM_STR);
         $stm->execute();        //sqlの実行
+        session_destroy();
         header("location:Login.php");
         exit();
     }
-}
 
+  }
 ?>
 
 <head>
 
-    <title>新規登録</title>
     <style>
 
 a{
@@ -210,9 +223,7 @@ body {
         <p>パスワード<?php if (isset($_SESSION["errpass"])) {
                     echo '<a style="color:#ff0000;font-size: 12px;">　　　　　　アルファベットと数字だけで8文字以上書いてください</a>';
                 } ?></p>
-            <input type="password" name="pass" placeholder="パスワード" value=" <?php if(!empty($_SESSION['pass'])){
-              echo $_SESSION['pass'];
-            } ?>"/>
+            <input type="password" name="pass" placeholder="パスワード" />
             <div class="loginbutton">
                         <button type="submit" class="roguinn">登録</button>
                     </div>
